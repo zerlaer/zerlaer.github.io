@@ -1,0 +1,782 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Zerlaer">
+  <meta name="keywords" content="">
+  
+  <title>Gentoo 安装基本系统 - Zerlaer&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/monokai.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"touch","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Zerlaer's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Gentoo 安装基本系统">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Zerlaer
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-07-10 21:24" pubdate>
+        2021年7月10日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.4k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      31
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Gentoo 安装基本系统</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：18 分钟前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="Gentoo-安装基本系统"><a href="#Gentoo-安装基本系统" class="headerlink" title="Gentoo 安装基本系统"></a>Gentoo 安装基本系统</h1><h3 id="下载镜像"><a href="#下载镜像" class="headerlink" title="下载镜像"></a>下载镜像</h3><p>采用 minimal+stage3 最小 CD 镜像的安装方式，必须要在联网下进行！</p>
+<p>首先去官网下载最新版的 minimal 镜像，镜像下载好之后开始刻录 iso</p>
+<p>windows 下推荐 rufus，开源免费，简单省事</p>
+<p>linux 下推荐使用 dd 命令</p>
+<p>插上 U 盘后终端输入 lsblk 查看盘是 sdc 还是 sd?</p>
+<p>dd 命令用法:if=xxx.iso of=/dev/sdc</p>
+<p>耐心等待几分钟，Minimal 镜像 200 多 M，很快就会写入完成，当提示写入完成后就可以重启选择 U 盘启动，启动过程中会让你选择键盘模式，选择 us，默认是 41，回车，继续启动，启动完成后会进入红色提示符界面，U 盘模式启动完毕。</p>
+<p>首先我们要做的是联网，如果是有线网，已经默认帮你连接好了，这时只需要用 ping 命令确认一下，如果没有插网线用的无线网，需要自行配置</p>
+<h3 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h3><p>如果是有线网，会自动连接，可以使用ping 命令测试</p>
+<h4 id="配置无线网"><a href="#配置无线网" class="headerlink" title="配置无线网"></a>配置无线网</h4><p><strong>lspci -k 检查设备驱动是否已经加载</strong></p>
+<p><strong>dmesg | grep firmware 检查内核中的固件信息</strong></p>
+<p>iwconfig 查看无线网卡名称，我的为 wlp3s0, 以下出现此名称的地方请替换为实际网卡名称</p>
+<p><strong>配置 /etc/conf.d/net</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">modules_wlp3s0=<span class="hljs-string">&quot;wpa_supplicant&quot;</span><br><br>wpa_supplicant_wlp3s0=<span class="hljs-string">&quot;-Dwext&quot;</span><br><br>config_wlp3s0=<span class="hljs-string">&quot;dhcp&quot;</span><br></code></pre></div></td></tr></table></figure>
+
+<p>其中 wlp3s0 是我的网卡设备</p>
+<p><strong>生成 wpa_supplicant.conf</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">wpa_passphrase 无线 SSID 无线密码 &gt; /etc/wpa_supplicant/wpa_supplicant.conf<br></code></pre></div></td></tr></table></figure>
+
+<p>配置启动脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">/etc/init.d<br><br>ln -s net.lo net.wlp3s0<br></code></pre></div></td></tr></table></figure>
+
+<p>启动网卡</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">/etc/init.d/net.wlp3s0 start<br></code></pre></div></td></tr></table></figure>
+
+<p>ping 测试</p>
+<h3 id="磁盘分区与挂载"><a href="#磁盘分区与挂载" class="headerlink" title="磁盘分区与挂载"></a>磁盘分区与挂载</h3><p>确认网络连接好之后下面开始分区操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">cfdisk /dev/sda<br></code></pre></div></td></tr></table></figure>
+
+<p>选择 new 选项新建分区</p>
+<p>这里需要提前知道电脑的启动模式，如果是传统的 BIOS 模式不需要单独划分 /boot/efi 分区，如果是 UEFI 模式则需要单独创建 /boot/efi 分区</p>
+<h4 id="UEFI-分区方案"><a href="#UEFI-分区方案" class="headerlink" title="UEFI 分区方案"></a>UEFI 分区方案</h4><p>这里以我的 128g 固态为例:</p>
+<table>
+<thead>
+<tr>
+<th>分区</th>
+<th>大小</th>
+<th>挂载点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>/dev/sda1</td>
+<td>500M</td>
+<td>/boot/efi</td>
+</tr>
+<tr>
+<td>/dev/sda2</td>
+<td>8G</td>
+<td>swap</td>
+</tr>
+<tr>
+<td>/dev/sda3</td>
+<td>30G</td>
+<td>/</td>
+</tr>
+<tr>
+<td>/dev/sda4</td>
+<td>80G</td>
+<td>/home</td>
+</tr>
+</tbody></table>
+<p>创建好分区后需要写入硬盘，选择 write 后输入 yes 确认</p>
+<p>接下来格式化和挂载分区</p>
+<p>将 sda1 格式化为 FAT32 格式用于启动分区</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">mkfs.vfat -F32 /dev/sda1<br></code></pre></div></td></tr></table></figure>
+
+<p>将 sda2 格式化为交换空间并打开</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">mkswap /dev/sda2 &amp;&amp; swapon /dev/sda2<br></code></pre></div></td></tr></table></figure>
+
+<p>将 sda3 格式化为 ext4 格式用于存放系统</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">mkfs.ext4 /dev/sda3<br></code></pre></div></td></tr></table></figure>
+
+<p>将 sda4 格式化为 ext4 用于存放用户文件</p>
+<p>格式化完毕后需要挂载分区</p>
+<p>首先挂载 / 根分区</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">mount /dev/sda3 /mnt/gentoo<br></code></pre></div></td></tr></table></figure>
+
+<p>创建 /boot/efi 目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">mkdir  -p /mnt/gentoo/boot/efi<br></code></pre></div></td></tr></table></figure>
+
+<p>创建 home 目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">mkdir -p /mnt/gentoo/home<br></code></pre></div></td></tr></table></figure>
+
+<p>挂载 boot</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">mount /dev/sda1 /mnt/gentoo/boot/boot/efi<br></code></pre></div></td></tr></table></figure>
+
+<p>挂载 home</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">mount /dev/sda4 /mnt/gentoo/home<br></code></pre></div></td></tr></table></figure>
+
+<p>挂载完毕输入 mount 检查</p>
+<h3 id="下载基本系统"><a href="#下载基本系统" class="headerlink" title="下载基本系统"></a>下载基本系统</h3><p>下载 stage3</p>
+<p>更新时间</p>
+<p>查看时间</p>
+<p>date</p>
+<p>＃Sat Sep 22 09:12:08 UTC 2019</p>
+<p>＃本地时间：9 月 22 日 17:08 2019</p>
+<p>＃设置时间： 9 月 22 日 17:08 2019</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">date 092217082019<br></code></pre></div></td></tr></table></figure>
+
+<p>下载 stage3</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /mnt/gentoo<br><br>links [https://mirrors.163.com/gentoo<br></code></pre></div></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://mirrors.163.com/gentoo">https://mirrors.163.com/gentoo</a>)</p>
+<p>选择 releases/amd64/autobuilds/current-install-amd64-minimal/stage3-amd64-201909xxxxx.tar.xz #文件名以自己下载的为准</p>
+<p>回车开始下载，下载完之后，按 ESC -&gt; 回车 -&gt; Exit -&gt; 回车 退出</p>
+<p>文件会存放在当前目录，使用 ls 命令查看</p>
+<p>解压 stage3</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">tar xvf stage3-amd64-201909xxxxx.tar.xz <span class="hljs-comment">#文件名以自己下载的为准</span><br></code></pre></div></td></tr></table></figure>
+
+<p>解压过程中注意观察有没有 error 错误</p>
+<p>解压完成后配置 make.conf</p>
+<p>检查 cpu 核心数</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">cat /proc/cpuinfo | grep processor<br></code></pre></div></td></tr></table></figure>
+
+<p>我的是 4 排 就证明是 4 核</p>
+<p>所以我的电脑设置是：MAKEOPTS=”-j5”</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;MAKEOPTS=&quot;-j5&quot;&#x27;</span> &gt;&gt; /etc/portage/make.conf<br></code></pre></div></td></tr></table></figure>
+
+<p>或者编辑 make.conf</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">nano /etc/portage/make.conf<br><span class="hljs-comment">#添加 </span><br>MAKEOPTS＝<span class="hljs-string">&quot;-j5&quot;</span><br></code></pre></div></td></tr></table></figure>
+
+
+
+<p><strong>选择镜像</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">microrselect -i -o  &gt;&gt; /mnt/gentoo/etc/portage/make.conf<br><br>mkdir --parents/mnt/gentoo/etc/repos.conf<br><br>cp /mnt/gentoo/usr/share/portage/config/repos. conf /mnt/gentop/repos.conf/gentoo.conf<br></code></pre></div></td></tr></table></figure>
+
+<p><strong>复制 DNS 信息</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">cp --dereference /etc/resolv.conf<br></code></pre></div></td></tr></table></figure>
+
+<p><strong>挂载文件系统</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">mount --types proc /proc /mnt/gentoo/proce<br><br>mount --rbind /sys /mnt/gentoo/sys<br><br>mount. --rbind /dev /mnt/gentoo/dev<br></code></pre></div></td></tr></table></figure>
+
+<p><strong>進入新環境</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">chroot /mnt/gentoo /bin/base<br><br>sourse /etc/profiler<br><br><span class="hljs-built_in">export</span> PS1＂(chroot) <span class="hljs-variable">$PS1</span><br></code></pre></div></td></tr></table></figure>
+
+<p>从 Web 安装 ebuild 存储库快照</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">emerge-webrsync<br></code></pre></div></td></tr></table></figure>
+
+<p>注意：这一步跟上面的选择镜像有关，如果发现一直处于执行状态，那么检查一下文件 /mnt/gentoo/etc/portage/make.conf 是否正确。</p>
+<h3 id="配置系统"><a href="#配置系统" class="headerlink" title="配置系统"></a>配置系统</h3><p><strong>选择配置</strong></p>
+<p>配置列表是实时更新的，所以需要根据实际做出选择，这里选择默认 12 即可，如果是 systemd，则需要选择带 systemd 字样的配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">eselect profile list<br><br>eselect profile <span class="hljs-built_in">set</span> 12<br></code></pre></div></td></tr></table></figure>
+
+<p><strong>更新 <a href="/world">@world </a> 集</strong> </p>
+<p>因为没有选择桌面环境，所有更新时间会短一些。</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">time emerge --ask --quiet --update --deep --newuse @world<br></code></pre></div></td></tr></table></figure>
+
+<p><strong>时区</strong></p>
+<p>选择本地时区</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">ls /usr/share/zoneinfo/Asia<br><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Asia/Shanghai&quot;</span> &gt; /etc/timezone<br></code></pre></div></td></tr></table></figure>
+
+<p>更新时区</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">emerge --config sys-libs/timezone-data<br></code></pre></div></td></tr></table></figure>
+
+<p><strong>配置语言环境</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> en_US.UTF-8 &gt; /etc/locale.gen<br></code></pre></div></td></tr></table></figure>
+
+<p>根据如下修改，这里需要注意，gentoo 默认不支持 zh_CN.UTF-8</p>
+<p>运行 locale-gen。它将生成 /etc/locale.gen 文件中指定的所有语言环境。</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">locale-gen<br><br>eselect locale list<br><br>eselect locale <span class="hljs-built_in">set</span> 6<br></code></pre></div></td></tr></table></figure>
+
+<p>选择 en_US UTF-8, 确保系统语言环境为英文，中文会报错</p>
+<p>重新加载环境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">env-update &amp;&amp; <span class="hljs-built_in">source</span> /etc/profile &amp;&amp; <span class="hljs-built_in">export</span> PS1=<span class="hljs-string">&quot;(chroot) <span class="hljs-variable">$PS1</span>&quot;</span><br></code></pre></div></td></tr></table></figure>
+
+<p>安装内核源码</p>
+<p>对于基于 amd64 的系统，Gentoo 推荐使用 sys-kernel /gentoo-sources 包。</p>
+<p>选择适当的内核源并使用 emerge 安装它：</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">emerge --ask sys-kernel/gentoo-sources<br></code></pre></div></td></tr></table></figure>
+
+<p>如果提示 needs updating</p>
+<p>则运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">etc-update<br></code></pre></div></td></tr></table></figure>
+
+<p>然后输入 - 3 -&gt; 回车 -&gt; yes , 之后在重新装一次即可。</p>
+<h3 id="编译内核"><a href="#编译内核" class="headerlink" title="编译内核"></a>编译内核</h3><p><strong>配置 kernel</strong></p>
+<p>这里使用自动配置方式，需要手动配置的请看 Gentoo Wiki。</p>
+<p>安装 kernel 自动配置工具 genkernel</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">emerge --ask --quiet sys-kernel/genkernel<br></code></pre></div></td></tr></table></figure>
+
+<p>安装时如果提示 USE changes，则运行：</p>
+<p>etc-update</p>
+<p>然后输入 - 3 -&gt; 回车 -&gt; yes , 之后在重新执行 time emerge –ask –quiet sys-kernel/genkernel 即可。</p>
+<p>安装完成之后，编辑 /etc/fstab 系统的挂载点：</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">nano -w /etc/fstab<br></code></pre></div></td></tr></table></figure>
+
+<p>修改分区表并保存，分区挂载点会永久生效</p>
+<p>将最前面的删掉修改为 /dev/sda1 或其他 sda 分区，这里注意修改 boot/efi 的文件系统为 vfat 而不是 ext4</p>
+<p>然后开始编译内核</p>
+<p>如果选择手动编译请去官网查看教程</p>
+<p>这里使用 genkernel 一键编译，</p>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">genkernel all<br></code></pre></div></td></tr></table></figure>
+
+<p>大概需要编译半小时左右，编译完成检查 boot 分区</p>
+<p>ls /boot/</p>
+<p>＃会显示两个文件</p>
+<p>遵循先多后少的选择，先自动编译</p>
+<p>让系统跑起来，以后慢慢精简内核</p>
+<p><strong>安装固件</strong></p>
+<p>某些驱动程序在工作之前需要在系统上安装其他固件。安装固件相当于 win 上装驱动</p>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">emerge --ask --quiet sys-kernel/linux-firmware<br></code></pre></div></td></tr></table></figure>
+
+<p><strong>修改主机名</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">nano -w /etc/conf.d/hostname<br></code></pre></div></td></tr></table></figure>
+
+<p>＃将 hostname 变量设置为自己取的主机名字</p>
+<figure class="highlight ini"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs ini"><span class="hljs-attr">hostname</span> =“ShadowElves”<br></code></pre></div></td></tr></table></figure>
+
+<p><strong>配置有线网</strong></p>
+<figure class="highlight brainfuck"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs brainfuck"><span class="hljs-comment">emerge</span> --<span class="hljs-comment">ask</span> <span class="hljs-comment"> </span>--<span class="hljs-comment">quiet</span> --<span class="hljs-comment">noreplace</span> <span class="hljs-comment">net</span><span class="hljs-literal">-</span><span class="hljs-comment">misc/netifrc</span><br></code></pre></div></td></tr></table></figure>
+
+<p>设置启动时自动启动网络</p>
+<p>要在引导时激活网络接口，需要将它们添加到默认运行级别。</p>
+<p>首先需要知道网络接口名称：</p>
+<p>使用 ifconfig 查看是 eth0，还是 enp3s0</p>
+<p>这里使用 enp3s0：</p>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">cd /etc/init.d<br><br>ln -s net.lo net.enp3s0<br><br>rc-update add net.enp3s0 default<br></code></pre></div></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">nano -w /etc/hosts<br><br>在 localhost 后添加主机名 ShadowElves<br><br>127.0.0.1 localhost ShadowElves<br></code></pre></div></td></tr></table></figure>
+
+<p>设置 root 密码</p>
+<p>passwd</p>
+<p>输入两次密码，提示 successful 证明修改成功</p>
+<p>设置时钟</p>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">nano -w /etc/conf.d/hwclock   ＃修改：clock=&quot;local&quot;<br></code></pre></div></td></tr></table></figure>
+
+<h3 id="安装工具"><a href="#安装工具" class="headerlink" title="安装工具"></a>安装工具</h3><figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 系统日志记录</span><br>emerge --ask sysklogd<br>rc-update add sysklogd default<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> Cron 守护程序</span><br>emerge --ask cronie<br><br>rc-update add cronie default<br><span class="hljs-meta">#</span><span class="bash"> 文件索引</span><br>emerge --ask mlocate<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> DHCP 客户端</span><br>emerge --ask dhcpcd<br>rc-update add dhcpcd default<br><span class="hljs-meta"></span><br><span class="hljs-meta">#</span><span class="bash"> 安装无线网络工具</span><br>emerge --ask iw wpa_supplicant<br></code></pre></div></td></tr></table></figure>
+
+<h3 id="配置引导"><a href="#配置引导" class="headerlink" title="配置引导"></a>配置引导</h3><p>配置引导加载程序</p>
+<p>UEFI 用户注意：</p>
+<p>用户需要确保 GRUB_PLATFORMS=”efi-64” 已启用，添加 GRUB_PLATFORMS=”efi-64”</p>
+<p>到 /etc/portage/make.conf 文件中，然后在安装 GRUB2 ：</p>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">echo &#x27;GRUB_PLATFORMS=&quot;efi-64&quot;&#x27; &gt;&gt; /etc/portage/make.conf<br><br>emerge -av grub:2 # 注意观察是否有 GRUB_PLATFORMS=&quot;efi-64&quot; 字样<br></code></pre></div></td></tr></table></figure>
+
+<p>安装 GRUB2 软件</p>
+<p>接下来，通过 grub-install 命令将必要的 GRUB2 文件安装到 /boot/grub 目录，确保 boot 分区已经挂载，否则会安装失败</p>
+<p>UEFI 用户：</p>
+<p>grub-install –target=x86_64-efi –efi-directory=/boot/efi</p>
+<p>BIOS 用户：</p>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">grub-install /dev/sda # /dev/sda 为 /boot 挂载分区<br></code></pre></div></td></tr></table></figure>
+
+<p>提示 no error reported 证明安装成功</p>
+<p>运行 grub-mkconfig 命令：</p>
+<p>GRUB2 将自动检测要引导的内核来生成最终的 GRUB 配置</p>
+<figure class="highlight awk"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs awk">grub-mkconfig -o <span class="hljs-regexp">/boot/g</span>rub/grub.cfg<br></code></pre></div></td></tr></table></figure>
+
+<p>出现两个 found 开头的文字和 done</p>
+<p>证明引导程序安装成功</p>
+<p>没有的话重新 genkernel all 生成再重复上一步操作</p>
+<p>如果是安装 win10 与 gentoo 双系统，需要另外安装 os-prober 用以检测 win10 的引导：</p>
+<figure class="highlight plaintext"><figcaption><span>为</span><a href="/boot">挂载分区</a></figcaption><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs ＃/dev/sda">emerge --ask os-prober<br></code></pre></div></td></tr></table></figure>
+
+<p>然后执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs bash">os-prober<br></code></pre></div></td></tr></table></figure>
+
+<h3 id="重新启动系统"><a href="#重新启动系统" class="headerlink" title="重新启动系统"></a>重新启动系统</h3><p>退出 chroot 环境并卸载所有已安装的分区。</p>
+<p>然后重新启动：reboot。</p>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">exit<br><br>cd<br><br>umount -l /mnt/gentoo/dev&#123;/shm,/pts,&#125;<br><br>umount -R /mnt/gentoo<br><br>reboot<br></code></pre></div></td></tr></table></figure>
+
+<p>不要忘记拔掉优盘，否则可能会再次引导 CD 而不是新的 Gentoo 系统。</p>
+<p>gentoo 命令行登录，此时输入 root -&gt; 回车 -&gt; 输入密码，即可进入 gentoo 系统。</p>
+<p>创建普通用户用于登陆桌面</p>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">useradd -m -G users,wheel,audio,video,cdrom,portage,cron -s /bin/bash moonery<br></code></pre></div></td></tr></table></figure>
+
+<p>passwd moonery　＃设置用户密码</p>
+<p>至此，Gentoo 的基本系统已安装完成！</p>
+<p>接下来是安装显卡驱动，触摸板驱动 X 服务和桌面，这些会在下一篇文章中写到，敬请关注！</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Gentoo-Linux/">Gentoo Linux</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Hexo/">Hexo</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/07/11/Gentoo-%E5%AE%89%E8%A3%85gnome%E6%A1%8C%E9%9D%A2-1/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Gentoo 安装gnome桌面</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"Gc2zIJnndcbfvsYIQqlO2z7y-MdYXbMMI","appKey":"UYQI9Wch5b633OY831Gq6EtN","placeholder":"说点什么","path":"window.location.pathname","avatar":"retro","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false,"requiredFields":[]},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     Copyright <i class="iconfont icon-copyright"></i> 2021 <a href="zerlaer.com" target="_blank" rel="nofollow noopener"><span>Zerlaer</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
